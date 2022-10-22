@@ -5,6 +5,9 @@ import { UpdateRouteDto } from './dto/update-route.dto';
 import { ClientKafka, Payload, MessagePattern } from '@nestjs/microservices';
 import { Producer } from '@nestjs/microservices/external/kafka.interface';
 import { finished } from 'stream';
+import { Socket, Server } from 'socket.io';
+import { WebSocketServer } from '@nestjs/websockets';
+import { RoutesGateway } from './routes.gateway';
 
 @Controller('routes')
 export class RoutesController implements OnModuleInit{
@@ -14,6 +17,7 @@ export class RoutesController implements OnModuleInit{
     private readonly routesService: RoutesService,
     @Inject('KAFKA_SERVICE')
     private kafkaClient: ClientKafka,
+    private routeGateway: RoutesGateway,
     ) {}
 
 
@@ -65,13 +69,13 @@ export class RoutesController implements OnModuleInit{
     message: {
       value: {
         routeId: String;
-        clientId: String;
+        clientId: string;
         position: [Number, Number]
         finished: Boolean;
       }
     }
   ){
     console.log(message);
-
+    this.routeGateway.sendPosition(message.value);
   }
 }

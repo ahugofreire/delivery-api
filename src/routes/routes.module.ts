@@ -4,6 +4,7 @@ import { ClientsModule, Transport} from '@nestjs/microservices';
 import { RoutesService } from './routes.service';
 import { RoutesController } from './routes.controller';
 import { Route, RouteSchema } from './entities/route.entity';
+import { RoutesGateway } from './routes.gateway';
 
 @Module({
   imports: [
@@ -33,6 +34,6 @@ import { Route, RouteSchema } from './entities/route.entity';
     ])
   ],
   controllers: [RoutesController],
-  providers: [RoutesService]
+  providers: [RoutesService, RoutesGateway]
 })
 export class RoutesModule {}
